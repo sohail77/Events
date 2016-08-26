@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "208191870217",
+    "firebase_url": "https://events-cbb23.firebaseio.com",
+    "project_id": "events-cbb23",
+    "storage_bucket": "events-cbb23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:208191870217:android:bcc578dee64cc41f",
+        "android_client_info": {
+          "package_name": "com.sohail.events"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "208191870217-1ovcqj4plq3k8ed9h558p8tbr6oufkkv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQVx5Bgn9mkzaum7meikQYlAqwexqIOJo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
