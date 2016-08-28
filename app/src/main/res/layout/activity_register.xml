@@ -68,5 +68,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="34dp"
         android:hint="Phone no..."
+        android:maxLength="10"
         />
 </RelativeLayout>
