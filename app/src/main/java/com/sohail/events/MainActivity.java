@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.sohail.events.m_Firebase.FirebaseHelper;
 import com.sohail.events.m_Model.Spacecraft;
 import com.sohail.events.m_UI.MyAdapter;
+import com.google.firebase.firebase_core.*;
 
 /*
 1.INITIALIZE FIREBASE DB
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener authListener;
     SwipeRefreshLayout swipeRefresh;
 
+    static boolean calledAlready=false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,14 +51,28 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+        if(!calledAlready){
+            swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+            calledAlready=true;
+        }
+
+
         //SETUP RECYCLER
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         //INITIALIZE FIREBASE DB
         db= FirebaseDatabase.getInstance().getReference();
         helper=new FirebaseHelper(db);
+
+
+
+
+
+
+
 
         //ADAPTER
         adapter=new MyAdapter(this,helper.retrieve());
