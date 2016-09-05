@@ -52,16 +52,17 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if(!calledAlready){
-            swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swiperefresh);
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
             calledAlready=true;
         }
 
+        swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swiperefresh);
 
         //SETUP RECYCLER
         rv = (RecyclerView) findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
 
         //INITIALIZE FIREBASE DB
         db= FirebaseDatabase.getInstance().getReference();
