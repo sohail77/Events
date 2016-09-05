@@ -7,8 +7,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -30,8 +33,10 @@ import retrofit2.Retrofit;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    EditText nameReg, phoneReg, branchReg, yearReg, eventReg;
+    EditText nameReg, phoneReg, yearReg, eventReg;
+    TextView eventTxt;
     Button regBtn;
+    AutoCompleteTextView branchReg;
 
 
     public static final MediaType FORM_DATA_TYPE
@@ -51,12 +56,24 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+
+        eventTxt=(TextView)findViewById(R.id.eventTxt);
         nameReg = (EditText) findViewById(R.id.nameReg);
         phoneReg = (EditText) findViewById(R.id.phoneReg);
-        branchReg = (EditText) findViewById(R.id.branchReg);
+        branchReg = (AutoCompleteTextView) findViewById(R.id.branchReg);
         yearReg = (EditText) findViewById(R.id.yearReg);
-        eventReg = (EditText) findViewById(R.id.eventReg);
         regBtn = (Button) findViewById(R.id.regBtn);
+
+
+        String[] branches=getResources().getStringArray(R.array.branch_name);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, branches);
+        branchReg.setAdapter(adapter);
+
+        Bundle eventText=getIntent().getExtras();
+        String EventName=eventText.getString("EventName");
+
+        eventTxt.setText(EventName);
+
 
 
         regBtn.setOnClickListener(new View.OnClickListener() {
@@ -69,12 +86,12 @@ public class RegisterActivity extends AppCompatActivity {
                 //execute asynctask
                 postDataTask.execute(URL, nameReg.getText().toString(),
                         phoneReg.getText().toString(),
-                        eventReg.getText().toString(),
+                        eventTxt.getText().toString(),
                         branchReg.getText().toString(),
                         yearReg.getText().toString());
                 nameReg.setText("");
                 phoneReg.setText("");
-                eventReg.setText("");
+              //  eventReg.setText("");
                 branchReg.setText("");
                 yearReg.setText("");
             }

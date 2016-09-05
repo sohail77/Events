@@ -9,54 +9,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.sohail.events.RegisterActivity">
 
+
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/nameReg"
         android:hint="Name..."
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/eventTxt"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="42dp" />
 
-    <EditText
+    <AutoCompleteTextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/branchReg"
         android:hint="Branch..."
-        android:layout_below="@+id/eventReg"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="34dp"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/phoneReg"
+        android:layout_marginTop="26dp"/>
 
     <EditText
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:id="@+id/yearReg"
-        android:layout_below="@+id/eventReg"
         android:layout_alignTop="@+id/branchReg"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="Year..."/>
+        android:hint="Year..."
+        android:layout_centerVertical="true"
+        android:layout_below="@+id/phoneReg"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="register"
         android:id="@+id/regBtn"
+        android:layout_marginTop="31dp"
         android:layout_below="@+id/branchReg"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="53dp"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/eventReg"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:hint="Event Name"
-        android:layout_below="@+id/phoneReg" />
+        android:layout_centerHorizontal="true" />
 
     <EditText
         android:layout_width="match_parent"
@@ -64,10 +59,21 @@
         android:inputType="phone"
         android:ems="10"
         android:id="@+id/phoneReg"
-        android:layout_below="@+id/nameReg"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="34dp"
         android:hint="Phone no..."
         android:maxLength="10"
-        />
+        android:layout_below="@+id/nameReg"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/eventTxt"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>

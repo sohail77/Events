@@ -33,4 +33,15 @@
     <string name="lbl_forgot_password">Forgot password?</string>
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
+    <string-array name="branch_name">
+        <item >IT</item>
+        <item>ECE</item>
+        <item>CSE</item>
+        <item>Mechanical</item>
+        <item>EEE</item>
+        <item>EIE</item>
+        <item>Civil</item>
+    </string-array>
+
+
 </resources>

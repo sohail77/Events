@@ -58,6 +58,10 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(DetailActivity.this, RegisterActivity.class);
+
+                String eventName = nameTxt.getText().toString();
+                i.putExtra("EventName" , eventName);
+
                 startActivity(i);
 
             }
