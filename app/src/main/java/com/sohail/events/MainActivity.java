@@ -2,6 +2,7 @@ package com.sohail.events;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,10 +19,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.sohail.events.m_Firebase.FirebaseHelper;
 import com.sohail.events.m_Model.Spacecraft;
 import com.sohail.events.m_UI.MyAdapter;
@@ -33,6 +38,10 @@ import com.google.firebase.firebase_core.*;
 3.DATA INPUT
  */
 public class MainActivity extends AppCompatActivity {
+
+
+    private static final int RC_PHOTO_PICKER =  2;
+
     DatabaseReference db;
     FirebaseHelper helper;
     MyAdapter adapter;
@@ -40,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
     EditText nameEditTxt,grpTxt,descTxt,linkTxt;
     FirebaseAuth.AuthStateListener authListener;
     SwipeRefreshLayout swipeRefresh;
+    Uri downloadUrl;
+
+    FirebaseStorage mfirebaseStorage;
+    private StorageReference mEventPhotoReference;
 
     static boolean calledAlready=false;
 
@@ -50,6 +63,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mfirebaseStorage=FirebaseStorage.getInstance();
 
         if(!calledAlready){
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -66,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
 
         //INITIALIZE FIREBASE DB
         db= FirebaseDatabase.getInstance().getReference();
+        mEventPhotoReference=mfirebaseStorage.getReference().child("Event Photos");
         helper=new FirebaseHelper(db);
 
 
@@ -124,7 +140,20 @@ public class MainActivity extends AppCompatActivity {
         grpTxt= (EditText) d.findViewById(R.id.propellantEditText);
         descTxt= (EditText) d.findViewById(R.id.descEditText);
         Button saveBtn= (Button) d.findViewById(R.id.saveBtn);
+        Button photoBtn=(Button)d.findViewById(R.id.photoBtn);
         linkTxt = (EditText) d.findViewById(R.id.linkEditText);
+
+
+
+        photoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/jpeg");
+                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+            }
+        });
 
 
         //SAVE
@@ -138,12 +167,14 @@ public class MainActivity extends AppCompatActivity {
                 String desc=descTxt.getText().toString();
                 String link=linkTxt.getText().toString();
 
+
                 //SET DATA
                 Spacecraft s=new Spacecraft();
                 s.setName(name);
                 s.setPropellant(propellant);
                 s.setDescription(desc);
                 s.setLink(link);
+                s.setImageUrl(downloadUrl.toString());
 
                 //SIMPLE VALIDATION
                 if(name != null && name.length()>0)
@@ -156,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                         grpTxt.setText("");
                         descTxt.setText("");
                         linkTxt.setText("");
+
 
                         adapter=new MyAdapter(MainActivity.this,helper.retrieve());
                         rv.setAdapter(adapter);
@@ -172,4 +204,25 @@ public class MainActivity extends AppCompatActivity {
         d.show();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+
+            StorageReference photoRef=mEventPhotoReference.child(selectedImageUri.getLastPathSegment());
+
+            photoRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // When the image has successfully uploaded, we get its download URL
+                            downloadUrl = taskSnapshot.getDownloadUrl();
+        }
+
+    });
+
+        }
+
+
+    }
 }

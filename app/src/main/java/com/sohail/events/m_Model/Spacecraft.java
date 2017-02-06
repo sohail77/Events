@@ -3,7 +3,7 @@ package com.sohail.events.m_Model;
 
 public class Spacecraft {
 
-    String name,Group,description,Link;
+    String name,Group,description,Link,ImageUrl;
 
     public Spacecraft() {
     }
@@ -38,5 +38,13 @@ public class Spacecraft {
 
     public void setLink(String link) {
         Link = link;
+    }
+
+    public String getImageUrl() {
+        return ImageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        ImageUrl = imageUrl;
     }
 }
