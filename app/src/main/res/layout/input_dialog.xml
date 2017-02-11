@@ -37,7 +37,7 @@
                     android:layout_height="wrap_content"
                     android:hint= "Description"
                     android:maxLines="3"
-                    android:maxLength="600"/>
+                    />
 
 
         <EditText

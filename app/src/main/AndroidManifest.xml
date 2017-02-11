@@ -27,9 +27,11 @@
         <activity android:name=".RegisterActivity" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ResetPasswordActivity"></activity>
-        <activity android:name=".SignupActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ResetPasswordActivity" />
+        <activity android:name=".SignupActivity" />
+        <activity android:name=".Registration" />
+        <activity android:name=".RegistrationViewer"></activity>
     </application>
 
 </manifest>

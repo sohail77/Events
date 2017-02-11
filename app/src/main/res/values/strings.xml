@@ -34,7 +34,7 @@
     <string name="forgot_password_msg">We just need your registered Email Id to sent you password reset instructions.</string>
 
     <string-array name="branch_name">
-        <item >IT</item>
+        <item>IT</item>
         <item>ECE</item>
         <item>CSE</item>
         <item>Mechanical</item>

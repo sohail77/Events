@@ -29,6 +29,7 @@ public class DetailActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton regFab=(FloatingActionButton)findViewById(R.id.regFab);
 
         CollapsingToolbarLayout collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
 
@@ -88,6 +89,18 @@ public class DetailActivity extends AppCompatActivity {
 
             }
         });
+
+        regFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(DetailActivity.this,RegistrationViewer.class);
+                String EventName=name;
+                i.putExtra("EventName",EventName);
+                startActivity(i);
+
+            }
+        });
+
     }
 
 }

@@ -129,6 +129,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+
+            StorageReference photoRef=mEventPhotoReference.child(selectedImageUri.getLastPathSegment());
+
+            photoRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // When the image has successfully uploaded, we get its download URL
+                            downloadUrl = taskSnapshot.getDownloadUrl();
+                        }
+
+                    });
+
+        }
+
+
+    }
+
     //DISPLAY INPUT DIALOG
     private void displayInputDialog()
     {
@@ -170,12 +193,16 @@ public class MainActivity extends AppCompatActivity {
 
                 //SET DATA
                 Spacecraft s=new Spacecraft();
-                s.setName(name);
-                s.setPropellant(propellant);
-                s.setDescription(desc);
-                s.setLink(link);
-                s.setImageUrl(downloadUrl.toString());
 
+                if(downloadUrl==null){
+                    Toast.makeText(MainActivity.this,"Photo is necessary to add an Event",Toast.LENGTH_SHORT).show();
+                }else {
+                    s.setName(name);
+                    s.setPropellant(propellant);
+                    s.setDescription(desc);
+                    s.setLink(link);
+                    s.setImageUrl(downloadUrl.toString());
+                }
                 //SIMPLE VALIDATION
                 if(name != null && name.length()>0)
                 {
@@ -187,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
                         grpTxt.setText("");
                         descTxt.setText("");
                         linkTxt.setText("");
+                        downloadUrl=null;
 
 
                         adapter=new MyAdapter(MainActivity.this,helper.retrieve());
@@ -204,25 +232,4 @@ public class MainActivity extends AppCompatActivity {
         d.show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
-
-            StorageReference photoRef=mEventPhotoReference.child(selectedImageUri.getLastPathSegment());
-
-            photoRef.putFile(selectedImageUri)
-                    .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // When the image has successfully uploaded, we get its download URL
-                            downloadUrl = taskSnapshot.getDownloadUrl();
-        }
-
-    });
-
-        }
-
-
-    }
 }

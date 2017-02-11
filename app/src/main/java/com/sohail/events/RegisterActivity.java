@@ -37,6 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
     TextView eventTxt;
     Button regBtn;
     AutoCompleteTextView branchReg;
+    TextView phoneNumber;
 
 
     public static final MediaType FORM_DATA_TYPE
@@ -74,6 +75,8 @@ public class RegisterActivity extends AppCompatActivity {
 
         eventTxt.setText(EventName);
 
+//        String phoneNo=phoneReg.getText().toString();
+//       phoneNumber.setText("+91" + phoneNo);
 
 
         regBtn.setOnClickListener(new View.OnClickListener() {
