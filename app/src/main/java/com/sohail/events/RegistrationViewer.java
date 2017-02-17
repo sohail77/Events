@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sohail.events.m_UI.RegistrationAdapter;
@@ -27,6 +29,7 @@ public class RegistrationViewer extends AppCompatActivity {
     private RegistrationAdapter adapter;
     public  String EventName;
     List<Row> rows;
+    TextView noData;
 
 
 
@@ -40,7 +43,7 @@ public class RegistrationViewer extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         Bundle eventText=getIntent().getExtras();
         EventName = eventText.getString("EventName");
-
+        noData=(TextView)findViewById(R.id.noData);
 
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
@@ -61,6 +64,11 @@ public class RegistrationViewer extends AppCompatActivity {
                             adapter = new RegistrationAdapter(rows);
                             recyclerView.setAdapter(adapter);
 
+
+                if(adapter.getItemCount()==0){
+                    recyclerView.setVisibility(View.INVISIBLE);
+                    noData.setVisibility(View.VISIBLE);
+                }
 
 
                     Log.d(TAG, "no of rows recieved " + rows.size());
