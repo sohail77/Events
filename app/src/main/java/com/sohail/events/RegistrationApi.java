@@ -11,6 +11,6 @@ import retrofit2.http.Query;
 
 public interface RegistrationApi {
 
-    @GET("/api?id=1eCEO9rrOvpN21tQiSd1OYBMSyQXiebE8KKhss5hQkMA")
-    Call<Registration> getRows(@Query("event-name") String EventName);
+    @GET("/api?id=1eCEO9rrOvpN21tQiSd1OYBMSyQXiebE8KKhss5hQkMA&")
+    Call<Registration> getRows(@Query("q") String EventName);
 }

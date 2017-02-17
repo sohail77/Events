@@ -1,5 +1,7 @@
 package com.sohail.events;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +12,7 @@ import android.widget.Toast;
 import com.sohail.events.m_UI.RegistrationAdapter;
 
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,7 +25,7 @@ public class RegistrationViewer extends AppCompatActivity {
     private static final String BASE_URL="http://gsx2json.com";
     private static final String TAG=RegistrationViewer.class.getSimpleName();
     private RegistrationAdapter adapter;
-    public String EventName;
+    public  String EventName;
     List<Row> rows;
 
 
@@ -47,15 +50,19 @@ public class RegistrationViewer extends AppCompatActivity {
 
         Call<Registration> call=apiService.getRows(EventName);
         call.enqueue(new Callback<Registration>() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT)
             @Override
             public void onResponse(Call<Registration> call, Response<Registration> response) {
                 int statusCode=response.code();
 
 
                     rows = response.body().getRows();
-                    adapter = new RegistrationAdapter(rows);
-                    recyclerView.setAdapter(adapter);
-                    //recyclerView.setAdapter(new RegistrationAdapter(rows, R.layout.registration_item_view, getApplicationContext()));
+
+                            adapter = new RegistrationAdapter(rows);
+                            recyclerView.setAdapter(adapter);
+
+
+
                     Log.d(TAG, "no of rows recieved " + rows.size());
 
             }

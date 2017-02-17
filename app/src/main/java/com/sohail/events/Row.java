@@ -14,6 +14,7 @@ public class Row {
     private String name;
     @SerializedName("phoneno.")
     private String phoneno;
+    @SerializedName("event-name")
     private String eventName;
     private String branch;
     private String year;

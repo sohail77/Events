@@ -5,22 +5,29 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.sohail.events.m_Model.Spacecraft;
 
 public class DetailActivity extends AppCompatActivity {
 
-    TextView nameTxt,descTxt, propTxt,linkTxt;
+    TextView descTxt, propTxt,linkTxt;
    ImageView img;
     String imgUrl;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +35,18 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        MultiDex.install(this);
+        final FrameLayout frameLayout = (FrameLayout) findViewById(R.id.frame_layout);
+        frameLayout.getBackground().setAlpha(0);
+
+        final FloatingActionsMenu fab = (FloatingActionsMenu) findViewById(R.id.fab);
         FloatingActionButton regFab=(FloatingActionButton)findViewById(R.id.regFab);
+        FloatingActionButton RegisterFab=(FloatingActionButton)findViewById(R.id.RegisterFab);
 
         CollapsingToolbarLayout collapsingToolbarLayout=(CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
 
         Spacecraft s=new Spacecraft();
 
-        nameTxt = (TextView) findViewById(R.id.nameDetailTxt);
         descTxt= (TextView) findViewById(R.id.descDetailtxt);
         propTxt = (TextView) findViewById(R.id.propellantDetailTxt);
         linkTxt=(TextView) findViewById(R.id.linkDetailTxt);
@@ -59,9 +70,6 @@ public class DetailActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(name);
 
 
-        //BIND DATA
-        //img.setImageBitmap(bmp);
-//        nameTxt.setText(name);
         descTxt.setText(desc);
         propTxt.setText(propellant);
         linkTxt.setText(link);
@@ -77,7 +85,27 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                frameLayout.getBackground().setAlpha(240);
+                frameLayout.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        fab.collapse();
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                frameLayout.getBackground().setAlpha(0);
+                frameLayout.setOnTouchListener(null);
+           }
+        });
+
+        RegisterFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent i = new Intent(DetailActivity.this, RegisterActivity.class);
