@@ -2,15 +2,20 @@ package com.sohail.events;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -32,6 +37,8 @@ import com.sohail.events.m_Model.Spacecraft;
 import com.sohail.events.m_UI.MyAdapter;
 import com.google.firebase.firebase_core.*;
 
+import java.util.Objects;
+
 /*
 1.INITIALIZE FIREBASE DB
 2.INITIALIZE UI
@@ -50,13 +57,16 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth.AuthStateListener authListener;
     SwipeRefreshLayout swipeRefresh;
     Uri downloadUrl;
-
+    String Admin_code;
     FirebaseStorage mfirebaseStorage;
     private StorageReference mEventPhotoReference;
+    FloatingActionButton fab;
+    SharedPreferences sharedPreferences;
 
     static boolean calledAlready=false;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,13 +113,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(this);
+        Admin_code=sharedPreferences.getString(getString(R.string.Admin_code),getString(R.string.Admin_default_value));
+
+        Log.e("MainActivity","" + Admin_code);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 displayInputDialog();
             }
         });
+
+        fab.setVisibility(View.GONE);
+        showBtn();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    protected void onResume() {
+        showBtn();
+        super.onResume();
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void showBtn(){
+        Admin_code=sharedPreferences.getString(getString(R.string.Admin_code),getString(R.string.Admin_default_value));
+        if(Objects.equals(Admin_code, "28011996")){
+
+            fab.setVisibility(View.VISIBLE);
+
+        }
+        else
+            fab.setVisibility(View.GONE);
 
 
     }
@@ -124,8 +163,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(MainActivity.this,LoginActivity.class));
+        int id = item.getItemId();
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            return true;
+        }
+        if(id==R.id.settings){
+            Intent settingsIntent=new Intent(this,Settings.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
