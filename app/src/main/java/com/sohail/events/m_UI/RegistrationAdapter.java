@@ -1,8 +1,11 @@
 package com.sohail.events.m_UI;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,10 +32,12 @@ public class RegistrationAdapter extends RecyclerView.Adapter<RegistrationAdapte
     private List<Row> rows;
     private Context context;
     private int rowLayout;
+    String phoneclick;
 
 
 
-    public RegistrationAdapter(List<Row> rows) {
+    public RegistrationAdapter(Context context,List<Row> rows) {
+        this.context=context;
         this.rows=rows;
 
     }
@@ -46,17 +51,25 @@ public class RegistrationAdapter extends RecyclerView.Adapter<RegistrationAdapte
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onBindViewHolder(RegistrationViewHolder holder, int position) {
+    public void onBindViewHolder(final RegistrationViewHolder holder, int position) {
 
 
 
 
             holder.studentName.setText(rows.get(position).getName());
             holder.studentPhone.setText(String.valueOf(rows.get(position).getPhoneno()));
+            phoneclick=rows.get(position).getPhoneno();
             holder.studentBranch.setText(rows.get(position).getBranch());
             holder.studentYear.setText(rows.get(position).getYear());
 
+        holder.studentPhone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                Intent i=new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneclick, null));
+                context.startActivity(i);
+            }
+        });
 
     }
 
@@ -77,7 +90,7 @@ public class RegistrationAdapter extends RecyclerView.Adapter<RegistrationAdapte
 
         public RegistrationViewHolder(View itemView) {
             super(itemView);
-            studentLayout=(LinearLayout)itemView.findViewById(R.id.studentLayout);
+            studentLayout=(LinearLayout) itemView.findViewById(R.id.studentLayout);
             studentName=(TextView)itemView.findViewById(R.id.studentName);
             studentPhone=(TextView)itemView.findViewById(R.id.studentPhoneNumber);
             studentBranch=(TextView)itemView.findViewById(R.id.studentBranch);

@@ -1,5 +1,6 @@
 package com.sohail.events;
 
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +31,7 @@ public class RegistrationViewer extends AppCompatActivity {
     public  String EventName;
     List<Row> rows;
     TextView noData;
+    TextView phoneClick;
 
 
 
@@ -44,6 +46,8 @@ public class RegistrationViewer extends AppCompatActivity {
         Bundle eventText=getIntent().getExtras();
         EventName = eventText.getString("EventName");
         noData=(TextView)findViewById(R.id.noData);
+        phoneClick=(TextView)findViewById(R.id.studentPhoneNumber);
+
 
         Retrofit retrofit=new Retrofit.Builder()
                 .baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create())
@@ -61,7 +65,7 @@ public class RegistrationViewer extends AppCompatActivity {
 
                     rows = response.body().getRows();
 
-                            adapter = new RegistrationAdapter(rows);
+                            adapter = new RegistrationAdapter(RegistrationViewer.this,rows);
                             recyclerView.setAdapter(adapter);
 
 
@@ -80,7 +84,12 @@ public class RegistrationViewer extends AppCompatActivity {
                 Log.e(TAG,t.toString());
             }
         });
+
+
+
     }
+
+
 
     public  String getEventName(){
         return EventName;

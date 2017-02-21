@@ -25,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import com.sohail.events.m_Model.Spacecraft;
-
 import java.util.Objects;
 
 public class DetailActivity extends AppCompatActivity {
