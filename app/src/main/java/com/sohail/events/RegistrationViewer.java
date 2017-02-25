@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +33,9 @@ public class RegistrationViewer extends AppCompatActivity {
     public  String EventName;
     List<Row> rows;
     TextView noData;
-    TextView phoneClick;
+    TextView phoneClick,numberOfReg;
+    int itemCount;
+    ProgressBar spinner2;
 
 
 
@@ -47,6 +51,10 @@ public class RegistrationViewer extends AppCompatActivity {
         EventName = eventText.getString("EventName");
         noData=(TextView)findViewById(R.id.noData);
         phoneClick=(TextView)findViewById(R.id.studentPhoneNumber);
+        numberOfReg=(TextView)findViewById(R.id.numberOfReg);
+        spinner2=(ProgressBar) findViewById(R.id.progressBar2);
+
+        spinner2.setVisibility(View.VISIBLE);
 
 
         Retrofit retrofit=new Retrofit.Builder()
@@ -67,7 +75,9 @@ public class RegistrationViewer extends AppCompatActivity {
 
                             adapter = new RegistrationAdapter(RegistrationViewer.this,rows);
                             recyclerView.setAdapter(adapter);
-
+                            itemCount=adapter.getItemCount();
+                            numberOfReg.setText("Number of students Registered : " + itemCount);
+                            spinner2.setVisibility(View.GONE);
 
                 if(adapter.getItemCount()==0){
                     recyclerView.setVisibility(View.INVISIBLE);

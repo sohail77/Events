@@ -1,11 +1,14 @@
 package com.sohail.events.m_Firebase;
 
+import android.util.Log;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.sohail.events.m_Model.Spacecraft;
+import com.sohail.events.m_UI.MyAdapter;
 
 import java.util.ArrayList;
 
@@ -33,6 +36,7 @@ public class FirebaseHelper {
                 db.child("Spacecraft").push().setValue(spacecraft);
                 saved=true;
 
+
             }catch (DatabaseException e)
             {
                 e.printStackTrace();
@@ -52,7 +56,9 @@ public class FirebaseHelper {
         {
             Spacecraft spacecraft=ds.getValue(Spacecraft.class);
             spacecrafts.add(spacecraft);
+
         }
+
     }
 
     //READ THEN RETURN ARRAYLIST
@@ -61,6 +67,8 @@ public class FirebaseHelper {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 fetchData(dataSnapshot);
+
+
             }
 
             @Override

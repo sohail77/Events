@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
@@ -22,13 +23,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -37,7 +42,12 @@ import com.sohail.events.m_Model.Spacecraft;
 import com.sohail.events.m_UI.MyAdapter;
 import com.google.firebase.firebase_core.*;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
+import retrofit2.http.Query;
 
 /*
 1.INITIALIZE FIREBASE DB
@@ -62,8 +72,11 @@ public class MainActivity extends AppCompatActivity {
     private StorageReference mEventPhotoReference;
     FloatingActionButton fab;
     SharedPreferences sharedPreferences;
+    ProgressBar spinner;
+
 
     static boolean calledAlready=false;
+    public MyAdapter adapter1;
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -73,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        spinner = (ProgressBar)findViewById(R.id.progressBar);
+        spinner.setVisibility(View.GONE);
+
 
         mfirebaseStorage=FirebaseStorage.getInstance();
 
@@ -96,14 +113,12 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-
         //ADAPTER
         adapter=new MyAdapter(this,helper.retrieve());
         rv.setAdapter(adapter);
+
+
+
 
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -138,6 +153,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void showBtn(){
@@ -238,6 +255,8 @@ public class MainActivity extends AppCompatActivity {
                 String propellant=grpTxt.getText().toString();
                 String desc=descTxt.getText().toString();
                 String link=linkTxt.getText().toString();
+                Long tsLong = System.currentTimeMillis()/1000;
+                String ts = tsLong.toString();
 
 
                 //SET DATA
@@ -251,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
                     s.setDescription(desc);
                     s.setLink(link);
                     s.setImageUrl(downloadUrl.toString());
+                    s.setTimestamp(ts);
                 }
                 //SIMPLE VALIDATION
                 if(name != null && name.length()>0)
@@ -266,8 +286,10 @@ public class MainActivity extends AppCompatActivity {
                         downloadUrl=null;
 
 
+
                         adapter=new MyAdapter(MainActivity.this,helper.retrieve());
                         rv.setAdapter(adapter);
+                        adapter.notifyDataSetChanged();
 
                     }
                 }else
@@ -280,5 +302,7 @@ public class MainActivity extends AppCompatActivity {
 
         d.show();
     }
+
+
 
 }

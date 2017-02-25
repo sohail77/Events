@@ -3,7 +3,12 @@ package com.sohail.events.m_Model;
 
 public class Spacecraft {
 
-    String name,Group,description,Link,ImageUrl;
+    String name;
+    String Group;
+    String description;
+    String Link;
+    String ImageUrl;
+    String timestamp;
 
     public Spacecraft() {
     }
@@ -46,5 +51,13 @@ public class Spacecraft {
 
     public void setImageUrl(String imageUrl) {
         ImageUrl = imageUrl;
+    }
+
+    public String getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(String timestamp) {
+        this.timestamp = timestamp;
     }
 }
