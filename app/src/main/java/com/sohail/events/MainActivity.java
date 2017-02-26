@@ -26,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -199,19 +200,27 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
+        if ((requestCode& 0xffff) == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
 
+
             StorageReference photoRef=mEventPhotoReference.child(selectedImageUri.getLastPathSegment());
+
 
             photoRef.putFile(selectedImageUri)
                     .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // When the image has successfully uploaded, we get its download URL
                             downloadUrl = taskSnapshot.getDownloadUrl();
+                            Toast.makeText(MainActivity.this,"Photo selected successfully",Toast.LENGTH_LONG).show();
                         }
 
-                    });
+                    }).addOnFailureListener(this, new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this,"there was a problem uploading photo",Toast.LENGTH_LONG).show();
+                }
+            });
 
         }
 
@@ -241,6 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setType("image/jpeg");
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+
             }
         });
 
@@ -262,16 +272,14 @@ public class MainActivity extends AppCompatActivity {
                 //SET DATA
                 Spacecraft s=new Spacecraft();
 
-                if(downloadUrl==null){
-                    Toast.makeText(MainActivity.this,"Photo is necessary to add an Event",Toast.LENGTH_SHORT).show();
-                }else {
+
                     s.setName(name);
                     s.setPropellant(propellant);
                     s.setDescription(desc);
                     s.setLink(link);
                     s.setImageUrl(downloadUrl.toString());
                     s.setTimestamp(ts);
-                }
+
                 //SIMPLE VALIDATION
                 if(name != null && name.length()>0)
                 {

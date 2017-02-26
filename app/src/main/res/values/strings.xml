@@ -116,6 +116,7 @@
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="Admin_code">Admin_code</string>
     <string name="Admin_default_value">0</string>
-
+    <string name="year_spinner">Select Year</string>
+    <string name="branch_spinner">Select branch</string>
 
 </resources>

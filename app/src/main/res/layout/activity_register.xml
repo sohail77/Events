@@ -20,30 +20,54 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="42dp" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/branchRegSpinnerText"
+        android:text="Select Branch"
+        android:layout_below="@+id/phoneReg"
+        android:padding="8dp"
+        android:layout_marginTop="25dp"
+        android:textSize="18sp"
+        />
 
-    <AutoCompleteTextView
+    <Spinner
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:id="@+id/branchReg"
-        android:hint="Branch..."
+        android:id="@+id/branchRegSpinner"
+        android:prompt="@string/branch_spinner"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/phoneReg"
-        android:layout_marginTop="26dp"
+        android:layout_below="@+id/branchRegSpinnerText"
+        android:layout_marginTop="6dp"
         android:completionThreshold="1"
-        android:singleLine="true"/>
+        />
 
-    <EditText
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/yearRegSpinnerText"
+        android:text="Select Year"
+        android:layout_below="@+id/phoneReg"
+        android:layout_alignParentRight="true"
+        android:padding="8dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginRight="25dp"
+        android:textSize="18sp"
+        />
+
+
+    <Spinner
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:id="@+id/yearReg"
-        android:layout_alignTop="@+id/branchReg"
+        android:id="@+id/yearRegSpinner"
+        android:layout_alignTop="@+id/branchRegSpinner"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="Year..."
         android:layout_centerVertical="true"
-        android:layout_below="@+id/phoneReg"
+        android:layout_below="@+id/yearRegSpinnerText"
         />
 
     <Button
@@ -52,7 +76,7 @@
         android:text="register"
         android:id="@+id/regBtn"
         android:layout_marginTop="31dp"
-        android:layout_below="@+id/branchReg"
+        android:layout_below="@+id/branchRegSpinner"
         android:layout_centerHorizontal="true" />
 
     <EditText

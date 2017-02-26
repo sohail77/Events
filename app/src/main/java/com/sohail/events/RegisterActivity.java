@@ -7,10 +7,12 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +23,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -31,13 +35,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    EditText nameReg, phoneReg, yearReg, eventReg;
+    EditText nameReg, phoneReg, eventReg;
     TextView eventTxt;
     Button regBtn;
-    AutoCompleteTextView branchReg;
     TextView phoneNumber;
+    String branchReg,yearReg;
 
 
     public static final MediaType FORM_DATA_TYPE
@@ -61,22 +65,55 @@ public class RegisterActivity extends AppCompatActivity {
         eventTxt=(TextView)findViewById(R.id.eventTxt);
         nameReg = (EditText) findViewById(R.id.nameReg);
         phoneReg = (EditText) findViewById(R.id.phoneReg);
-        branchReg = (AutoCompleteTextView) findViewById(R.id.branchReg);
-        yearReg = (EditText) findViewById(R.id.yearReg);
         regBtn = (Button) findViewById(R.id.regBtn);
 
 
-        String[] branches=getResources().getStringArray(R.array.branch_name);
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, branches);
-        branchReg.setAdapter(adapter);
+        Spinner spinner = (Spinner) findViewById(R.id.yearRegSpinner);
+        Spinner spinner1=(Spinner) findViewById(R.id.branchRegSpinner);
+
+        // Spinner click listener
+        spinner.setOnItemSelectedListener(this);
+        spinner1.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> Years = new ArrayList<String>();
+        Years.add("1");
+        Years.add("2");
+        Years.add("3");
+        Years.add("4");
+        Years.add("Outsider");
+
+        // Spinner Drop down elements
+        List<String> branches = new ArrayList<String>();
+        branches.add("Civil");
+        branches.add("CSE");
+        branches.add("EEE");
+        branches.add("ECE");
+        branches.add("Mechanical");
+        branches.add("IT");
+        branches.add("Outsider");
+
+
+
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Years);
+        ArrayAdapter<String> dataAdapter1=new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, branches);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        spinner.setAdapter(dataAdapter);
+        spinner1.setAdapter(dataAdapter1);
+
 
         Bundle eventText=getIntent().getExtras();
         String EventName=eventText.getString("EventName");
 
         eventTxt.setText(EventName);
 
-//        String phoneNo=phoneReg.getText().toString();
-//       phoneNumber.setText("+91" + phoneNo);
 
 
         regBtn.setOnClickListener(new View.OnClickListener() {
@@ -90,19 +127,36 @@ public class RegisterActivity extends AppCompatActivity {
                 postDataTask.execute(URL, nameReg.getText().toString(),
                         phoneReg.getText().toString(),
                         eventTxt.getText().toString(),
-                        branchReg.getText().toString(),
-                        yearReg.getText().toString());
+                        branchReg,
+                        yearReg);
                 nameReg.setText("");
                 phoneReg.setText("");
-              //  eventReg.setText("");
-                branchReg.setText("");
-                yearReg.setText("");
+
             }
         });
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        switch (adapterView.getId()){
+            case R.id.branchRegSpinner:
+                branchReg=adapterView.getItemAtPosition(i).toString();
+                break;
+            case R.id.yearRegSpinner:
+                yearReg=adapterView.getItemAtPosition(i).toString();
+                break;
 
-private class PostDataTask extends AsyncTask<String, Void, Boolean> {
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
+    }
+
+
+    private class PostDataTask extends AsyncTask<String, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(String... contactData) {
@@ -143,13 +197,17 @@ private class PostDataTask extends AsyncTask<String, Void, Boolean> {
             result = false;
         }
         return result;
-    }
-}
 
-    protected void onPostExecute(Boolean result){
-        //Print Success or failure message accordingly
-        Toast.makeText(this,result?"Message successfully sent!":"There was some error in sending message. Please try again after some time.",Toast.LENGTH_LONG).show();
     }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            //Print Success or failure message accordingly
+        Toast.makeText(RegisterActivity.this,result?"Registered successfully":"There was some error. Please try again after some time.",Toast.LENGTH_LONG).show();
+
+        }
+    }
+
 
 }
 
