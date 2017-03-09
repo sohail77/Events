@@ -1,8 +1,12 @@
 package com.sohail.events;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -36,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.sohail.events.m_Firebase.FirebaseHelper;
@@ -55,7 +60,7 @@ import retrofit2.http.Query;
 2.INITIALIZE UI
 3.DATA INPUT
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnFirebaseDataChanged {
 
 
     private static final int RC_PHOTO_PICKER =  2;
@@ -76,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar spinner;
 
 
+
     static boolean calledAlready=false;
-    public MyAdapter adapter1;
+
 
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -89,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         spinner = (ProgressBar)findViewById(R.id.progressBar);
-        spinner.setVisibility(View.GONE);
+        spinner.setVisibility(View.VISIBLE);
 
 
         mfirebaseStorage=FirebaseStorage.getInstance();
@@ -110,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         //INITIALIZE FIREBASE DB
         db= FirebaseDatabase.getInstance().getReference();
         mEventPhotoReference=mfirebaseStorage.getReference().child("Event Photos");
-        helper=new FirebaseHelper(db);
+        helper=new FirebaseHelper(db,this);
 
 
 
@@ -144,6 +150,12 @@ public class MainActivity extends AppCompatActivity {
 
         fab.setVisibility(View.GONE);
         showBtn();
+
+
+        if(!isNetworkStatusAvialable (getApplicationContext())) {
+            Toast.makeText(getApplicationContext(), "Check your Internet Connection", Toast.LENGTH_LONG).show();
+        }
+
 
     }
 
@@ -203,15 +215,24 @@ public class MainActivity extends AppCompatActivity {
         if ((requestCode& 0xffff) == RC_PHOTO_PICKER && resultCode == RESULT_OK) {
             Uri selectedImageUri = data.getData();
 
-
+            final ProgressDialog pd=new ProgressDialog(MainActivity.this);
             StorageReference photoRef=mEventPhotoReference.child(selectedImageUri.getLastPathSegment());
 
 
-            photoRef.putFile(selectedImageUri)
+            photoRef.putFile(selectedImageUri).addOnProgressListener(this, new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    pd.setMessage("uploading "+progress+" %");
+                    pd.show();
+                }
+            })
                     .addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             // When the image has successfully uploaded, we get its download URL
                             downloadUrl = taskSnapshot.getDownloadUrl();
+                            pd.hide();
                             Toast.makeText(MainActivity.this,"Photo selected successfully",Toast.LENGTH_LONG).show();
                         }
 
@@ -312,5 +333,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void dataChanged() {
+        adapter.notifyDataSetChanged();
+        spinner.setVisibility(View.GONE);
+    }
 
+
+    public static boolean isNetworkStatusAvialable (Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null)
+        {
+            NetworkInfo netInfos = connectivityManager.getActiveNetworkInfo();
+            if(netInfos != null)
+                if(netInfos.isConnected())
+                    return true;
+        }
+        return false;
+    }
 }

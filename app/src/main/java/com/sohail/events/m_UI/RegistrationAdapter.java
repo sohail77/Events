@@ -62,14 +62,14 @@ public class RegistrationAdapter extends RecyclerView.Adapter<RegistrationAdapte
             holder.studentBranch.setText(rows.get(position).getBranch());
             holder.studentYear.setText(rows.get(position).getYear());
 
-        holder.studentPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent i=new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phoneclick, null));
-                context.startActivity(i);
-            }
-        });
+//        holder.studentPhone.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.e("got the phone no.","" + phoneclick);
+//                Intent i=new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel:", phoneclick, null));
+//                context.startActivity(i);
+//            }
+//        });
 
     }
 

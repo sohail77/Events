@@ -29,7 +29,8 @@
         android:gravity="end"
         android:id="@+id/studentPhoneNumber"
         android:padding="10dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:autoLink="phone"/>
 
 </LinearLayout>
 

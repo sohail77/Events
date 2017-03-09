@@ -7,6 +7,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+import com.sohail.events.OnFirebaseDataChanged;
 import com.sohail.events.m_Model.Spacecraft;
 import com.sohail.events.m_UI.MyAdapter;
 
@@ -15,12 +17,15 @@ import java.util.ArrayList;
 
 public class FirebaseHelper {
 
+    OnFirebaseDataChanged dataChangeListener;
     DatabaseReference db;
     Boolean saved=null;
     ArrayList<Spacecraft> spacecrafts=new ArrayList<>();
+    ArrayList<Spacecraft> events=new ArrayList<>();
 
-    public FirebaseHelper(DatabaseReference db) {
+    public FirebaseHelper(DatabaseReference db, OnFirebaseDataChanged dataChangeListener) {
         this.db = db;
+        this.dataChangeListener=dataChangeListener;
     }
 
     //WRITE IF NOT NULL
@@ -48,7 +53,7 @@ public class FirebaseHelper {
     }
 
     //IMPLEMENT FETCH DATA AND FILL ARRAYLIST
-    private void fetchData(DataSnapshot dataSnapshot)
+    public void fetchData(DataSnapshot dataSnapshot)
     {
         spacecrafts.clear();
 
@@ -59,14 +64,22 @@ public class FirebaseHelper {
 
         }
 
+        dataChangeListener.dataChanged();
+
+
+
     }
 
+
     //READ THEN RETURN ARRAYLIST
-    public ArrayList<Spacecraft> retrieve() {
+    public  ArrayList<Spacecraft> retrieve() {
+
         db.addChildEventListener(new ChildEventListener() {
+            
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 fetchData(dataSnapshot);
+
 
 
             }
@@ -95,4 +108,5 @@ public class FirebaseHelper {
         });
         return spacecrafts;
     }
+
 }
