@@ -43,6 +43,16 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.sohail.events.m_Firebase.FirebaseHelper;
 import com.sohail.events.m_Model.Spacecraft;
 import com.sohail.events.m_UI.MyAdapter;
@@ -79,6 +89,9 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
     FloatingActionButton fab;
     SharedPreferences sharedPreferences;
     ProgressBar spinner;
+    private Drawer result = null;
+    private AccountHeader header= null;
+
 
 
 
@@ -93,6 +106,73 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        final IProfile profile=new ProfileDrawerItem().withName("GROUPS").withIcon(R.drawable.e).withIdentifier(8);
+        header=new AccountHeaderBuilder().withActivity(this).withHeaderBackground(R.drawable.header)
+                .addProfiles(profile).withSavedInstance(savedInstanceState)
+                .build();
+
+
+
+        new DrawerBuilder().withActivity(this).withAccountHeader(header).build();
+        final PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Groups");
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(4).withName("Settings");
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(header)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withIdentifier(2).withName("ACM"),
+                        new PrimaryDrawerItem().withIdentifier(3).withName("CSI"),
+                        new PrimaryDrawerItem().withIdentifier(5).withName("ECELL"),
+                        new PrimaryDrawerItem().withIdentifier(6).withName("IEEE"),
+                        new PrimaryDrawerItem().withIdentifier(7).withName("Engineers without borders"),
+                        new DividerDrawerItem(),
+                        item2,
+                        new SecondaryDrawerItem().withName("Logout").withIdentifier(9)
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        // do something with the clicked item :D
+                        if(drawerItem.getIdentifier()==2){
+                            Intent intent=new Intent(MainActivity.this,ACM.class);
+                            String ACM="ACM";
+                            intent.putExtra("GROUP_NAME",ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==3){
+                            Intent intent=new Intent(MainActivity.this,ACM.class);
+                            String ACM="CSI";
+                            intent.putExtra("GROUP_NAME",ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==4) {
+                            Intent intent = new Intent(MainActivity.this, Settings.class);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==5) {
+                            Intent intent = new Intent(MainActivity.this, ACM.class);
+                            String ACM = "ECELL";
+                            intent.putExtra("GROUP_NAME", ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==6) {
+                            Intent intent = new Intent(MainActivity.this, ACM.class);
+                            String ACM = "IEEE";
+                            intent.putExtra("GROUP_NAME", ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==7) {
+                            Intent intent = new Intent(MainActivity.this, ACM.class);
+                            String ACM = "ENGINEERS WITHOUT BORDERS";
+                            intent.putExtra("GROUP_NAME", ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==9) {
+                            FirebaseAuth.getInstance().signOut();
+                            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        }
+                        return true;
+                    }
+                })
+                .build();
+
+
 
         spinner = (ProgressBar)findViewById(R.id.progressBar);
         spinner.setVisibility(View.VISIBLE);
@@ -183,30 +263,6 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_logout) {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            return true;
-        }
-        if(id==R.id.settings){
-            Intent settingsIntent=new Intent(this,Settings.class);
-            startActivity(settingsIntent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
 
     @Override
@@ -351,4 +407,15 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
         }
         return false;
     }
+
+    @Override
+    public void onBackPressed() {
+        //handle the back press :D close the drawer first and if the drawer is closed close the activity
+        if (result != null && result.isDrawerOpen()) {
+            result.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }

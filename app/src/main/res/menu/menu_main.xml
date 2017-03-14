@@ -12,4 +12,9 @@
         android:title="Settings">
 
     </item>
+
+    <item android:id="@+id/ACM"
+        android:title="ACM">
+
+    </item>
 </menu>

@@ -21,7 +21,7 @@ public class FirebaseHelper {
     DatabaseReference db;
     Boolean saved=null;
     ArrayList<Spacecraft> spacecrafts=new ArrayList<>();
-    ArrayList<Spacecraft> events=new ArrayList<>();
+
 
     public FirebaseHelper(DatabaseReference db, OnFirebaseDataChanged dataChangeListener) {
         this.db = db;
@@ -75,7 +75,7 @@ public class FirebaseHelper {
     public  ArrayList<Spacecraft> retrieve() {
 
         db.addChildEventListener(new ChildEventListener() {
-            
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 fetchData(dataSnapshot);
@@ -108,5 +108,10 @@ public class FirebaseHelper {
         });
         return spacecrafts;
     }
+
+
+
+
+
 
 }
