@@ -43,7 +43,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="MainActivity" />
         </activity>
-        <activity android:name=".ACM"></activity>
+        <activity android:name=".ACM" />
+        <activity android:name=".AboutMe">
+
+        </activity>
     </application>
 
 </manifest>

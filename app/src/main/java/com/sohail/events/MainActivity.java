@@ -122,13 +122,18 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
                 .withToolbar(toolbar)
                 .withAccountHeader(header)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withIdentifier(2).withName("ACM"),
-                        new PrimaryDrawerItem().withIdentifier(3).withName("CSI"),
+                        new PrimaryDrawerItem().withIdentifier(2).withName("IT"),
+                        new PrimaryDrawerItem().withIdentifier(3).withName("CSE"),
                         new PrimaryDrawerItem().withIdentifier(5).withName("ECELL"),
-                        new PrimaryDrawerItem().withIdentifier(6).withName("IEEE"),
-                        new PrimaryDrawerItem().withIdentifier(7).withName("Engineers without borders"),
+                        new PrimaryDrawerItem().withIdentifier(6).withName("ROBOTICS"),
+                        new PrimaryDrawerItem().withIdentifier(7).withName("CIVIL"),
+                        new PrimaryDrawerItem().withIdentifier(10).withName("MECHANICAL"),
+                        new PrimaryDrawerItem().withIdentifier(11).withName("EED"),
+                        new PrimaryDrawerItem().withIdentifier(12).withName("ECE"),
+
                         new DividerDrawerItem(),
                         item2,
+                        new SecondaryDrawerItem().withName("About Me").withIdentifier(13),
                         new SecondaryDrawerItem().withName("Logout").withIdentifier(9)
                 )
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -137,12 +142,12 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
                         // do something with the clicked item :D
                         if(drawerItem.getIdentifier()==2){
                             Intent intent=new Intent(MainActivity.this,ACM.class);
-                            String ACM="ACM";
+                            String ACM="IT";
                             intent.putExtra("GROUP_NAME",ACM);
                             startActivity(intent);
                         }else if(drawerItem.getIdentifier()==3){
                             Intent intent=new Intent(MainActivity.this,ACM.class);
-                            String ACM="CSI";
+                            String ACM="CSE";
                             intent.putExtra("GROUP_NAME",ACM);
                             startActivity(intent);
                         }else if(drawerItem.getIdentifier()==4) {
@@ -155,17 +160,35 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
                             startActivity(intent);
                         }else if(drawerItem.getIdentifier()==6) {
                             Intent intent = new Intent(MainActivity.this, ACM.class);
-                            String ACM = "IEEE";
+                            String ACM = "ROBOTICS";
                             intent.putExtra("GROUP_NAME", ACM);
                             startActivity(intent);
                         }else if(drawerItem.getIdentifier()==7) {
                             Intent intent = new Intent(MainActivity.this, ACM.class);
-                            String ACM = "ENGINEERS WITHOUT BORDERS";
+                            String ACM = "CIVIL";
                             intent.putExtra("GROUP_NAME", ACM);
                             startActivity(intent);
                         }else if(drawerItem.getIdentifier()==9) {
                             FirebaseAuth.getInstance().signOut();
                             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                        }else if(drawerItem.getIdentifier()==10) {
+                            Intent intent = new Intent(MainActivity.this, ACM.class);
+                            String ACM = "MECHANICAL";
+                            intent.putExtra("GROUP_NAME", ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==11) {
+                            Intent intent = new Intent(MainActivity.this, ACM.class);
+                            String ACM = "EED";
+                            intent.putExtra("GROUP_NAME", ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==12) {
+                            Intent intent = new Intent(MainActivity.this, ACM.class);
+                            String ACM = "ECE";
+                            intent.putExtra("GROUP_NAME", ACM);
+                            startActivity(intent);
+                        }else if(drawerItem.getIdentifier()==13) {
+                            Intent intent = new Intent(MainActivity.this, AboutMe.class);
+                            startActivity(intent);
                         }
                         return true;
                     }
