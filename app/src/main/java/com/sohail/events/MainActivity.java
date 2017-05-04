@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -106,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        FirebaseMessaging.getInstance().subscribeToTopic("android");
 
         final IProfile profile=new ProfileDrawerItem().withName("GROUPS").withIcon(R.drawable.e).withIdentifier(8);
         header=new AccountHeaderBuilder().withActivity(this).withHeaderBackground(R.drawable.header)
@@ -275,7 +277,8 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public void showBtn(){
         Admin_code=sharedPreferences.getString(getString(R.string.Admin_code),getString(R.string.Admin_default_value));
-        if(Objects.equals(Admin_code, "28011996")){
+        if((Objects.equals(Admin_code, "28011996"))||(Objects.equals(Admin_code,"19960128"))||(Objects.equals(Admin_code,"01199628"))
+                ||(Objects.equals(Admin_code,"16041991"))||(Objects.equals(Admin_code,"04199116"))||(Objects.equals(Admin_code,"14199311"))){
 
             fab.setVisibility(View.VISIBLE);
 
@@ -380,6 +383,8 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
                     s.setImageUrl(downloadUrl.toString());
                     s.setTimestamp(ts);
 
+
+
                 //SIMPLE VALIDATION
                 if(name != null && name.length()>0)
                 {
@@ -431,14 +436,5 @@ public class MainActivity extends AppCompatActivity implements OnFirebaseDataCha
         return false;
     }
 
-    @Override
-    public void onBackPressed() {
-        //handle the back press :D close the drawer first and if the drawer is closed close the activity
-        if (result != null && result.isDrawerOpen()) {
-            result.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
-    }
 
 }

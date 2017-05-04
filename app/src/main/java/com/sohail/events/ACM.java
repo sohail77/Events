@@ -38,6 +38,7 @@ public class ACM extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_acm);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         rv=(RecyclerView)findViewById(R.id.rv);
         rv.setLayoutManager(new LinearLayoutManager(this));
         swipeRefresh=(SwipeRefreshLayout)findViewById(R.id.swiperefresh);

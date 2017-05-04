@@ -16,6 +16,7 @@ public class AboutMe extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_me);
+        this.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         fb=(ImageButton)findViewById(R.id.fb);
         ldin=(ImageButton)findViewById(R.id.ldin);

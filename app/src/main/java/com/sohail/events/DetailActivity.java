@@ -81,21 +81,28 @@ public class DetailActivity extends AppCompatActivity {
 
         collapsingToolbarLayout.setTitle(name);
 
+        if(link.isEmpty()){
+            linkTxt.setEnabled(false);
+        }
 
         descTxt.setText(desc);
         propTxt.setText(propellant);
         linkTxt.setText(link);
         Glide.with(this).load(imgUrl).dontTransform().into(img);
 
-        linkTxt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String url= linkTxt.getText().toString();
-                Intent u=new Intent(Intent.ACTION_VIEW);
-                u.setData(Uri.parse(url));
-                startActivity(u);
-            }
-        });
+
+
+
+            linkTxt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = linkTxt.getText().toString();
+                    Intent u = new Intent(Intent.ACTION_VIEW);
+                    u.setData(Uri.parse(url));
+                    startActivity(u);
+                }
+            });
+
 
         fab.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
             @Override
@@ -143,9 +150,11 @@ public class DetailActivity extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         public void showBtn(){
             Admin_code=sharedPreferences.getString(getString(R.string.Admin_code),getString(R.string.Admin_default_value));
-            if(Objects.equals(Admin_code, "28011996")){
+        if((Objects.equals(Admin_code, "28011996"))||(Objects.equals(Admin_code,"19960128"))||(Objects.equals(Admin_code,"01199628"))
+                ||(Objects.equals(Admin_code,"16041991"))||(Objects.equals(Admin_code,"04199116"))||(Objects.equals(Admin_code,"14199311"))){
 
-                regFab.setOnClickListener(new View.OnClickListener() {
+
+            regFab.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Intent i=new Intent(DetailActivity.this,RegistrationViewer.class);
